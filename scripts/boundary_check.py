@@ -40,15 +40,6 @@ _FILLER_WORDS: frozenset[str] = frozenset({
 
 # == Negation Detection ==========================================
 
-_NEGATION_PATTERN: re.Pattern[str] = re.compile(
-    r"\b(?:never|no|not|don't|dont|do\s+not|cannot|can't|cant"
-    r"|shouldn't|shouldnt|should\s+not|mustn't|mustnt|must\s+not"
-    r"|won't|wont|will\s+not|wouldn't|wouldnt|would\s+not"
-    r"|avoid|prohibit|forbid|disallow|reject|exclude"
-    r"|without|neither|nor)\b",
-    re.IGNORECASE,
-)
-
 _NEGATION_CONTEXT_PATTERN: re.Pattern[str] = re.compile(
     r"(?:never|no|not|don't|dont|do\s+not|cannot|can't|cant"
     r"|shouldn't|shouldnt|should\s+not|mustn't|mustnt|must\s+not"
@@ -193,11 +184,10 @@ def is_instruction_file(path: Path) -> str:
     if name == "CLAUDE.md":
         return "yes"
 
-    parts_str = str(resolved)
-    if ".claude" in parts_str:
+    if ".claude" in resolved.parts:
         return "yes"
 
-    if name.endswith(".md") and "docs" in parts_str:
+    if name.endswith(".md") and "docs" in resolved.parts:
         return "ambiguous"
 
     return "no"
@@ -210,13 +200,12 @@ def is_in_instruction_tree(path: Path) -> bool:
     """Check if a write target is within the allowed instruction tree."""
     resolved = path.resolve()
     name = resolved.name
-    parts_str = str(resolved)
 
     if name == "CLAUDE.md":
         return True
-    if ".claude" in parts_str:
+    if ".claude" in resolved.parts:
         return True
-    if name.endswith(".md") and "docs" in parts_str:
+    if name.endswith(".md") and "docs" in resolved.parts:
         return True
     return False
 

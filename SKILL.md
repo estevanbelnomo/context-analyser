@@ -14,9 +14,9 @@ description: >
 
 # Context Analyser
 
-Audits CLAUDE.md and project instruction files for token efficiency.
-Runs a four-step escalating pipeline: Audit -> Compress -> Restructure -> Tier.
-Each step only runs if the previous did not reach GREEN (< 500 tokens).
+Audits CLAUDE.md for token efficiency via four-step escalating pipeline:
+Audit -> Compress -> Restructure -> Tier. Each step runs only if the
+previous did not reach GREEN (< 500 tokens).
 
 ## Commands
 /audit           Analyse token usage. Read-only, always safe.
@@ -28,7 +28,7 @@ Each step only runs if the previous did not reach GREEN (< 500 tokens).
 ## Token Counter
 If ANTHROPIC_API_KEY set: scripts/count_tokens.sh <file>
 Otherwise: python scripts/count_tokens.py <file>
-Both output the same JSON schema. Use --json for machine-readable output.
+Both output same JSON schema. --json for machine-readable output.
 
 ## Phase Routing
 After audit, load ONLY the reference for the current phase:
@@ -36,7 +36,7 @@ Phase 1: references/compression.md
 Phase 2: references/restructuring.md + references/layered-architecture.md
 Phase 3: references/tiering.md
 Thresholds: references/context-rot-thresholds.md (load during audit)
-Boundaries: references/boundary-score.md (load at skill start)
+Boundaries: references/boundary-score.md (load before write phases 1/2/3)
 
 ## Gates
 G0: After audit. Show report. User chooses auto or manual.

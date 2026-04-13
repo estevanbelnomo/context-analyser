@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
 Security self-test for context-analyser skill.
-Scans all Python files in the skill directory for policy violations.
+Scans all Python files in the scripts/ directory for policy violations.
+Test files and spec documents are excluded from the scan to avoid false
+positives from legitimate test-only imports (e.g. traceback, unittest).
+Subdirectories of scripts/ are scanned recursively via rglob("*.py").
 ZERO external dependencies. Stdlib only.
 """
 
@@ -19,6 +22,7 @@ _PERMITTED_MODULES: frozenset[str] = frozenset({
     "__future__",
     "ast",
     "json",
+    "os",
     "re",
     "sys",
     "collections",

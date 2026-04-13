@@ -3,24 +3,16 @@
 Token counter for CLAUDE.md audit skill.
 ZERO external dependencies. Stdlib only. Auditable in full.
 
-Security guarantees:
-  - No eval, exec, pickle, importlib, __import__
-  - No network calls (no socket, urllib, http)
-  - No subprocess calls
-  - No dynamic code loading of any kind
-  - Input path is validated before any file I/O
-  - All string processing uses compile-time regex patterns
-
+Security: No eval/exec/pickle/importlib/__import__. No network from Python.
+No subprocess. No dynamic loading. Input paths validated. Compile-time regex only.
 Accuracy: ~93-95% vs Claude's actual tokenizer on typical CLAUDE.md content.
-
-NOTE: This file is at ~486 lines, near the 500-line hard limit (Rule 8).
-If phase-specific counting logic is added later, split into separate modules
-(e.g. count_tokens_core.py + count_tokens_audit.py).
+Near 500-line limit (Rule 8). Split if adding phase-specific logic.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -32,27 +24,34 @@ from pathlib import Path
 def _validate_path(raw: str) -> Path:
     """
     Validate and resolve file path. Rejects path traversal,
-    null bytes, and non-regular files.
+    null bytes, symlinks escaping allowed roots, and non-regular files.
+
+    Security properties:
+      - resolve(strict=True) dereferences ALL symlinks before root check
+      - A symlink at .claude/evil.md -> /etc/shadow resolves to /etc/shadow
+        which fails the root check
+      - Null bytes are rejected before any filesystem operation
+      - Only regular files pass (no directories, devices, pipes)
     """
     if "\x00" in raw:
         raise ValueError("Null byte in path.")
 
-    path = Path(raw).resolve()
+    try:
+        path = Path(raw).resolve(strict=True)
+    except OSError as exc:
+        raise ValueError(
+            f"Path resolution failed (broken symlink or missing file): {exc}"
+        )
 
-    allowed_roots = [
+    allowed_roots = (
+        Path.cwd().resolve(),
         Path.home().resolve(),
         Path("/mnt/user-data").resolve(),
         Path("/mnt/skills").resolve(),
         Path("/tmp").resolve(),
-    ]
-    # On Windows, also allow the current working directory tree
-    cwd = Path.cwd().resolve()
-    if cwd not in allowed_roots:
-        allowed_roots.append(cwd)
-
-    sep = "\\" if sys.platform == "win32" else "/"
+    )
     if not any(
-        path == root or str(path).startswith(str(root) + sep)
+        path == root or str(path).startswith(str(root) + os.sep)
         for root in allowed_roots
     ):
         raise ValueError(f"Path outside allowed roots: {path}")
@@ -267,6 +266,13 @@ def _recommend_tier(
 ) -> tuple[int, str]:
     """
     Recommend a tier for a section based on size and role.
+
+    Known limitation (V2 backlog): This heuristic is size-based only.
+    Domain-specific sections at 100-300 tokens (e.g. "Database Conventions"
+    at 250 tokens) may be classified as T0 when they should be T1. V2 will
+    add keyword-based domain detection that checks section headers and content
+    against known domain signal words (sql, migration, component, deploy, etc.)
+    to classify sections by domain regardless of size.
     """
     h = header.lower()
 

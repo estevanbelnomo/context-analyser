@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 .claude/backups/
 *.tmp
+
+# Design specification documents (brainstorming history, not part of deployed skill)
+context-analyser-specs/
+docs/superpowers/specs/

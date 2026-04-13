@@ -50,6 +50,13 @@ total_tokens=$(
 
 # -- Per-section counts --
 # Split file by markdown headers, count each section separately.
+# NOTE: Per-section loop runs in a subshell. A single API timeout produces
+# null for that section's token count. V2 should add per-call error checking
+# with retry logic or graceful fallback to Python for per-section breakdown.
+# NOTE: No rate limiting for files with 30+ sections (spec recommends batching
+# or falling back to Python). No real CLAUDE.md hits this threshold, but if one
+# did, V2 should count sections first and route to count_tokens.py for per-section
+# breakdown when section_count > 25.
 
 sections_json=$(
     awk '
