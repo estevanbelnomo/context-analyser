@@ -39,13 +39,13 @@ Clone into your project's skills directory:
 ```bash
 # From your project root
 mkdir -p .claude/skills
-git clone https://github.com/YOUR_USERNAME/context-analyser.git .claude/skills/context-analyser
+git clone https://github.com/estevanbelnomo/context-analyser.git .claude/skills/context-analyser
 ```
 
 Or as a git submodule:
 
 ```bash
-git submodule add https://github.com/YOUR_USERNAME/context-analyser.git .claude/skills/context-analyser
+git submodule add https://github.com/estevanbelnomo/context-analyser.git .claude/skills/context-analyser
 ```
 
 Claude Code detects the skill automatically from `.claude/skills/`.
