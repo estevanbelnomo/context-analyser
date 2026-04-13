@@ -1,8 +1,44 @@
+# Python
 __pycache__/
-*.pyc
-.claude/backups/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temp files
 *.tmp
 
-# Design specification documents (brainstorming history, not part of deployed skill)
+# Claude Code
+.claude/backups/
+
+# Design history (brainstorming docs, not part of deployed skill)
 context-analyser-specs/
+context-analyser-distribution/
 docs/superpowers/specs/
+docs/superpowers/plans/
