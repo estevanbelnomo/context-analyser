@@ -14,7 +14,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 # Import target module
 # ---------------------------------------------------------------------------
-sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "skills" / "context-analyser" / "scripts"))
 
 import boundary_check as bc  # noqa: E402
 

@@ -12,7 +12,7 @@ import traceback
 from pathlib import Path
 
 # Allow importing from scripts/
-sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "skills" / "context-analyser" / "scripts"))
 
 from count_tokens import (
     _pre_tokenize,

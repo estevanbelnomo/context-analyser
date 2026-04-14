@@ -34,7 +34,17 @@ Each phase only runs if the previous one didn't bring the file into the GREEN zo
 
 ## Installation
 
-Clone into your project's skills directory:
+### As a Claude Code plugin (recommended)
+
+```bash
+# Add the marketplace
+/plugin marketplace add estevanbelnomo/context-analyser
+
+# Install the plugin
+/plugin install context-analyser@estevanbelnomo/context-analyser
+```
+
+### Manual (clone into skills directory)
 
 ```bash
 # From your project root
@@ -110,13 +120,13 @@ Run the token counter without the skill:
 
 ```bash
 # Exact count (requires API key)
-./scripts/count_tokens.sh CLAUDE.md
+./skills/context-analyser/scripts/count_tokens.sh CLAUDE.md
 
 # Offline count (~94% accuracy)
-python scripts/count_tokens.py CLAUDE.md
+python skills/context-analyser/scripts/count_tokens.py CLAUDE.md
 
 # JSON output
-python scripts/count_tokens.py CLAUDE.md --json
+python skills/context-analyser/scripts/count_tokens.py CLAUDE.md --json
 ```
 
 ## Security
@@ -133,19 +143,25 @@ This skill runs inside Claude Code which has access to your API key, file system
 
 ```
 context-analyser/
-+-- SKILL.md                         Core skill (488 tokens, GREEN zone)
-+-- scripts/
-|   +-- count_tokens.sh              Bash exact counter (Anthropic API)
-|   +-- count_tokens.py              Python fallback (stdlib only)
-|   +-- boundary_check.py            Scope enforcement (stdlib only)
-|   +-- self_test.py                 Security AST scanner (stdlib only)
-+-- references/
-|   +-- compression.md               Phase 1 guidance
-|   +-- restructuring.md             Phase 2 guidance
-|   +-- layered-architecture.md      5-layer model reference
-|   +-- tiering.md                   Phase 3 guidance
-|   +-- context-rot-thresholds.md    Zone data (Chroma research)
-|   +-- boundary-score.md            Scope governance spec
++-- .claude-plugin/
+|   +-- plugin.json                  Plugin manifest
+|   +-- marketplace.json             Marketplace definition
++-- package.json                     npm metadata (minimal)
++-- skills/
+|   +-- context-analyser/
+|       +-- SKILL.md                 Core skill (488 tokens, GREEN zone)
+|       +-- scripts/
+|       |   +-- count_tokens.sh      Bash exact counter (Anthropic API)
+|       |   +-- count_tokens.py      Python fallback (stdlib only)
+|       |   +-- boundary_check.py    Scope enforcement (stdlib only)
+|       |   +-- self_test.py         Security AST scanner (stdlib only)
+|       +-- references/
+|           +-- compression.md       Phase 1 guidance
+|           +-- restructuring.md     Phase 2 guidance
+|           +-- layered-architecture.md  5-layer model reference
+|           +-- tiering.md           Phase 3 guidance
+|           +-- context-rot-thresholds.md  Zone data (Chroma research)
+|           +-- boundary-score.md    Scope governance spec
 +-- tests/
     +-- test_count_tokens.py         57 tests
     +-- test_boundary_check.py       32 tests
@@ -165,7 +181,7 @@ The skill defines token budget zones and a tiered architecture that keeps your C
 
 ## Contributing
 
-1. All Python must use stdlib only. Run `python scripts/self_test.py` before submitting.
+1. All Python must use stdlib only. Run `python skills/context-analyser/scripts/self_test.py` before submitting.
 2. All tests must pass: `python -m pytest tests/ -v`
 3. SKILL.md must stay under 500 tokens.
 4. No external dependencies. Ever. See the security policy in the spec docs.

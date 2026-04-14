@@ -24,22 +24,16 @@ Monthly or less? -> T3. "Mistake on typical task if removed?" YES->T0/T1.
 
 ## Validation
 
-1. No trigger collisions (each keyword -> one T1 file).
-2. No circular refs (T1 files never cross-reference).
-3. No orphaned T2 (every T2 referenced by T1 or slash cmd).
-4. Max concurrent < 2,800.
+1. Trigger keywords disjoint across T1 files.
+2. T1 files must not cross-reference each other.
+3. Every T2 referenced by T1 or slash cmd. Max concurrent <2,800.
 
-## When NOT to Tier
-
-Post-compression < 800: sufficient. Single domain: T0+T2 only.
-Minimum 2 domains for T1 splitting.
+Do not tier files <800 tok or single-domain projects.
 
 ## Workflow
 
-1. Apply tier logic to remaining core sections.
-2. Define trigger keywords (disjoint).
-3. Validate (collisions, circular, orphans).
-4. Verify max concurrent < 2,800.
-5. GATE 3: [Apply] [Modify] [Stop].
-6. Execute moves (FILE_TREE_CONTAINMENT).
-7. Update routing index. Final count. STATELESS check.
+1. Apply tier logic to remaining sections.
+2. Define disjoint trigger keywords.
+3. Validate. Verify max concurrent <2,800.
+4. GATE 3: [Apply] [Modify] [Stop].
+5. Execute moves. Update routing index. Final count.

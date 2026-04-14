@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.0] - 2026-04-14
+
+### Added
+
+- Claude Code plugin structure (.claude-plugin/plugin.json, marketplace.json, package.json)
+- Plugin install via `/plugin marketplace add estevanbelnomo/context-analyser`
+- Phase projection table at Gate 0 showing estimated tokens per phase
+- Cumulative stepped path when no single phase reaches GREEN
+- Auto/Manual/Stop choice at Gate 0
+- Project CLAUDE.md with contribution rules and token budgets
+- layered-architecture-detail.md (examples and anti-patterns, loaded JIT)
+
+### Changed
+
+- Restructured as plugin: skill files moved to `skills/context-analyser/`
+- Pipeline order fixed to Restructure -> Compress -> Tier (was Compress first)
+- Token counter now mandatory before any report (ALWAYS run, not optional)
+- Projections use actual counter JSON, not manual estimates
+- SKILL.md description compressed (246 -> 143 tokens preamble)
+- layered-architecture.md split: core model (493 tok) + detail file (503 tok)
+- tiering.md trimmed (655 -> 583 tokens)
+- boundary-score.md trimmed (640 -> 445 tokens)
+- README.md updated with plugin install instructions and new paths
+
 ## [1.0.0] - 2026-04-13
 
 ### Added

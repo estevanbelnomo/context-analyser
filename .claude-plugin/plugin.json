@@ -1,0 +1,19 @@
+{
+  "name": "context-analyser",
+  "description": "Audit and optimise CLAUDE.md files for token efficiency and context rot mitigation",
+  "version": "1.0.0",
+  "author": {
+    "name": "Estevan"
+  },
+  "homepage": "https://github.com/estevanbelnomo/context-analyser",
+  "repository": "https://github.com/estevanbelnomo/context-analyser",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "context-rot",
+    "token-optimisation",
+    "claude-md",
+    "prompt-engineering",
+    "context-engineering"
+  ]
+}
