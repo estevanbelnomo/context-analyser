@@ -1,4 +1,4 @@
-# Phase 1: Compression
+# Phase 2: Compression
 
 Rewrite concisely, preserve meaning. Target: 30-50% reduction.
 
@@ -30,4 +30,4 @@ Conservative: false positives acceptable, false negatives not.
 2. Run semantic check per rewrite.
 3. Show before/after diff + token counts.
 4. GATE 1: [Apply all] [Apply selected] [Skip] [Stop].
-5. GREEN (< 500)? Done. Otherwise recommend Phase 2.
+5. GREEN (< 500)? Done. Otherwise recommend Phase 3 (Tier).

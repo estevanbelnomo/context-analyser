@@ -9,8 +9,8 @@ Context rot is the measurable degradation of LLM output quality as input token c
 Runs a four-phase escalating pipeline on your CLAUDE.md:
 
 1. **Audit** -- counts tokens per section, classifies into zones (GREEN/YELLOW/ORANGE/RED/CRITICAL), recommends tier assignments
-2. **Compress** -- rewrites instructions more concisely while preserving meaning (30-50% reduction typical)
-3. **Restructure** -- applies a layered architecture: lean core CLAUDE.md + domain skill files loaded on demand
+2. **Restructure** -- applies a layered architecture: lean core CLAUDE.md + domain skill files loaded on demand
+3. **Compress** -- rewrites instructions more concisely while preserving meaning (30-50% reduction typical)
 4. **Tier** -- decomposes remaining content into Tier 0 (always loaded), Tier 1 (auto-loaded by domain), Tier 2 (reference, JIT), Tier 3 (archive)
 
 Each phase only runs if the previous one didn't bring the file into the GREEN zone (< 500 tokens). You can stop at any gate.
@@ -67,8 +67,8 @@ Claude Code detects the skill automatically from `.claude/skills/`.
 | Command          | What It Does                                      |
 |------------------|---------------------------------------------------|
 | `/audit`         | Analyse token usage. Read-only, always safe.      |
-| `/compress`      | Rewrite instructions concisely (phase 1).         |
-| `/restructure`   | Apply layered architecture (phase 2).             |
+| `/restructure`   | Apply layered architecture (phase 1).             |
+| `/compress`      | Rewrite instructions concisely (phase 2).         |
 | `/tier`          | Split into tiered files (phase 3).                |
 | `/context-check` | Full pipeline: audit, then escalate as needed.    |
 
@@ -123,10 +123,10 @@ Run the token counter without the skill:
 ./skills/context-analyser/scripts/count_tokens.sh CLAUDE.md
 
 # Offline count (~94% accuracy)
-python skills/context-analyser/scripts/count_tokens.py CLAUDE.md
+python3 skills/context-analyser/scripts/count_tokens.py CLAUDE.md
 
 # JSON output
-python skills/context-analyser/scripts/count_tokens.py CLAUDE.md --json
+python3 skills/context-analyser/scripts/count_tokens.py CLAUDE.md --json
 ```
 
 ## Security
@@ -137,7 +137,7 @@ This skill runs inside Claude Code which has access to your API key, file system
 - **Python never touches the network.** Only `count_tokens.sh` (bash + curl) makes API calls.
 - **No eval, exec, pickle, subprocess.** All code paths are statically determinable.
 - **Input paths validated and sandboxed.** Symlink escapes caught. Path traversal blocked.
-- **AST security scanner included.** Run `python scripts/self_test.py` to verify compliance.
+- **AST security scanner included.** Run `python3 scripts/self_test.py` to verify compliance.
 
 ## Project Structure
 
@@ -149,7 +149,7 @@ context-analyser/
 +-- package.json                     npm metadata (minimal)
 +-- skills/
 |   +-- context-analyser/
-|       +-- SKILL.md                 Core skill (488 tokens, GREEN zone)
+|       +-- SKILL.md                 Core skill (< 500 tokens, GREEN zone)
 |       +-- scripts/
 |       |   +-- count_tokens.sh      Bash exact counter (Anthropic API)
 |       |   +-- count_tokens.py      Python fallback (stdlib only)
@@ -181,8 +181,8 @@ The skill defines token budget zones and a tiered architecture that keeps your C
 
 ## Contributing
 
-1. All Python must use stdlib only. Run `python skills/context-analyser/scripts/self_test.py` before submitting.
-2. All tests must pass: `python -m pytest tests/ -v`
+1. All Python must use stdlib only. Run `python3 skills/context-analyser/scripts/self_test.py` before submitting.
+2. All tests must pass: `python3 tests/test_count_tokens.py && python3 tests/test_boundary_check.py`
 3. SKILL.md must stay under 500 tokens.
 4. No external dependencies. Ever. See the security policy in the spec docs.
 

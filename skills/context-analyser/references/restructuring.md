@@ -1,4 +1,4 @@
-# Phase 2: Restructure
+# Phase 1: Restructure
 
 Apply 5-layer architecture. Move domain content out of core.
 See references/layered-architecture.md for the full model.
@@ -45,4 +45,4 @@ Trigger keywords: 3-6 per file, nouns, disjoint across files.
 5. Verify: core < 500, skill files < 800.
 6. GATE 2: [Apply] [Modify] [Stop].
 7. Write files (FILE_TREE_CONTAINMENT check each).
-8. GREEN? Done. Otherwise recommend Phase 3.
+8. GREEN? Done. Otherwise recommend Phase 2 (Compress).

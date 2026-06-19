@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.1] - 2026-06-19
+
+### Fixed
+
+- Phase numbering now matches execution order across SKILL.md, references, and README: Restructure = Phase 1, Compress = Phase 2, Tier = Phase 3 (previously the labels called Compress "phase 1" and Restructure "phase 2", contradicting the documented Restructure -> Compress -> Tier order). Gate numbers in SKILL.md realigned to execution order.
+- SKILL.md compressed back under 500 tokens (GREEN) by the bundled counter, restoring self-compliance with the project's own token budget (was ~641, YELLOW).
+- Test gate made honest: documentation now points at the stdlib standalone runners (python3 tests/test_count_tokens.py / test_boundary_check.py) instead of pytest, and the test "_assert" helper now raises on failure so a failing assertion can no longer be reported as a pass.
+- Plugin version metadata synced to 1.1.1 across plugin.json, package.json, and marketplace.json (were stuck at 1.0.0).
+
+### Changed
+
+- Documentation standardized on "python3" for all command-line invocations.
+
 ## [1.1.0] - 2026-04-14
 
 ### Added

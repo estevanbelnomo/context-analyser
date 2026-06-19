@@ -10,35 +10,30 @@ description: >
 
 # Context Analyser
 
-Audits CLAUDE.md for token efficiency via four-phase pipeline:
-Audit -> Restructure -> Compress -> Tier. After audit, user
-chooses Auto or Manual. Step order is ALWAYS 1-2-3.
+Audit is a read-only entry, not a phase. After audit, pick Auto or
+Manual. Order is ALWAYS Restructure, Compress, Tier.
 
 ## Commands
-/audit           Token audit. Read-only.
-/compress        Rewrite concisely (phase 1).
-/restructure     Layered architecture (phase 2).
-/tier            Split into tiered files (phase 3).
-/context-check   Full pipeline.
+/audit          read-only token audit
+/restructure    layered architecture, phase 1
+/compress       rewrite concisely, phase 2
+/tier           split into tiers, phase 3
+/context-check  full pipeline
 
 ## Token Counter
-ALWAYS run the counter before generating any report or projection.
-If ANTHROPIC_API_KEY set: scripts/count_tokens.sh <file>
-Otherwise: python scripts/count_tokens.py <file>
-Use --json. Use actual token counts from JSON, not estimates.
+ALWAYS run the counter before any report or projection.
+With ANTHROPIC_API_KEY use count_tokens.sh, else python3 count_tokens.py.
+Use --json counts, never estimates.
 
 ## Phase Routing
-After audit, load ONLY the current phase reference:
-Phase 1: references/compression.md
-Phase 2: references/restructuring.md + references/layered-architecture.md
-         (examples: references/layered-architecture-detail.md)
-Phase 3: references/tiering.md
-Thresholds: references/context-rot-thresholds.md (during audit)
-Boundaries: references/boundary-score.md (before write phases)
+Load ONLY the active phase reference (references/):
+P1 restructuring, layered-architecture; ex layered-architecture-detail.
+P2 compression. P3 tiering.
+context-rot-thresholds during audit; boundary-score before write phases.
 
 ## Gates
-G0: After audit. Show projections. Order: Restructure->Compress->Tier. User chooses Auto/Manual.
-G1: After compression. Show diff. Confirm before writing.
-G2: After restructure. Show file tree. Confirm before creating.
-G3: After tiering. Show assignments. Confirm before executing.
-Never write without gate confirmation.
+Never write or execute before confirming the gate's output.
+G0 after audit: projections, order Restructure, Compress, Tier; pick Auto or Manual.
+G1 after restructure: file tree.
+G2 after compress: diff.
+G3 after tier: assignments.

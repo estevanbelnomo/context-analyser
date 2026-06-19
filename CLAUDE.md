@@ -12,9 +12,9 @@ Claude Code skill for CLAUDE.md token optimisation.
 - Max concurrent: SKILL.md + one reference <1,700 tok.
 
 ## Testing
-- `python skills/context-analyser/scripts/self_test.py` (security scan)
-- `python -m pytest tests/ -v` (all tests must pass)
-- `python skills/context-analyser/scripts/count_tokens.py skills/context-analyser/SKILL.md` after SKILL.md edits
+- `python3 skills/context-analyser/scripts/self_test.py` (security scan)
+- `python3 tests/test_count_tokens.py && python3 tests/test_boundary_check.py` (all tests must pass; stdlib-only standalone runners, no pytest)
+- `python3 skills/context-analyser/scripts/count_tokens.py skills/context-analyser/SKILL.md` after SKILL.md edits
 
 ## Boundaries
 - Writes only to .claude/, CLAUDE.md, docs/*.md. No source code.

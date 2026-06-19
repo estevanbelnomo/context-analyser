@@ -39,6 +39,7 @@ def _assert(name: str, condition: bool, msg: str = "") -> None:
     if not condition:
         detail = f" — {msg}" if msg else ""
         print(f"  FAIL  {name}{detail}")
+        raise AssertionError(name + (": " + msg if msg else ""))
     else:
         print(f"  pass  {name}")
 
