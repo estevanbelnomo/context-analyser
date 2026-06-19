@@ -191,18 +191,23 @@ context-analyser/
 |       +-- scripts/
 |       |   +-- count_tokens.sh      Bash exact counter (Anthropic API)
 |       |   +-- count_tokens.py      Python fallback (stdlib only)
+|       |   +-- scan_project.py      Full-project resting-context scanner (stdlib only)
 |       |   +-- boundary_check.py    Scope enforcement (stdlib only)
 |       |   +-- self_test.py         Security AST scanner (stdlib only)
 |       +-- references/
-|           +-- compression.md       Phase 1 guidance
-|           +-- restructuring.md     Phase 2 guidance
-|           +-- layered-architecture.md  5-layer model reference
+|           +-- restructuring.md     Phase 1 guidance
+|           +-- compression.md       Phase 2 guidance
 |           +-- tiering.md           Phase 3 guidance
+|           +-- layered-architecture.md  5-layer model reference
+|           +-- layered-architecture-detail.md  Examples & anti-patterns (JIT)
 |           +-- context-rot-thresholds.md  Zone data (Chroma research)
 |           +-- boundary-score.md    Scope governance spec
+|           +-- project-scan.md      /project-scan guidance
 +-- tests/
+    +-- fixtures/                    Sample project trees (scan tests)
     +-- test_count_tokens.py         57 tests
     +-- test_boundary_check.py       32 tests
+    +-- test_scan_project.py         73 tests
     +-- KNOWN_TEST_GAPS.md           V2 test backlog
 ```
 
@@ -220,7 +225,7 @@ The skill defines token budget zones and a tiered architecture that keeps your C
 ## Contributing
 
 1. All Python must use stdlib only. Run `python3 skills/context-analyser/scripts/self_test.py` before submitting.
-2. All tests must pass: `python3 tests/test_count_tokens.py && python3 tests/test_boundary_check.py`
+2. All tests must pass: `python3 tests/test_count_tokens.py && python3 tests/test_boundary_check.py && python3 tests/test_scan_project.py`
 3. SKILL.md must stay under 500 tokens.
 4. No external dependencies. Ever. See the security policy in the spec docs.
 
