@@ -74,6 +74,7 @@ the skill automatically from `.claude/skills/`.
 | `/compress`      | Rewrite instructions concisely (phase 2).         |
 | `/tier`          | Split into tiered files (phase 3).                |
 | `/context-check` | Full pipeline: audit, then escalate as needed.    |
+| `/project-scan`  | Read-only full-project context scan. Always safe. |
 
 ### Example
 
@@ -108,6 +109,40 @@ the skill automatically from `.claude/skills/`.
     Reduction: 73.1%
 ========================================================================
 ```
+
+### Project context scan
+
+`/audit` measures a single CLAUDE.md file. `/project-scan` zooms out to the whole
+**resting-context baseline** -- the sum of every token loaded into every message
+*before you type a word*. That baseline is what actually sits on the context-rot
+curve, and CLAUDE.md is only one slice of it.
+
+The scan inventories every always-loaded source:
+
+- Root CLAUDE.md and its `@imports` (resolved recursively)
+- `CLAUDE.local.md` and the user-global `~/.claude/CLAUDE.md` (and its imports)
+- Nested subdirectory CLAUDE.md files (loaded conditionally)
+- Skill, agent, and command descriptions -- including enabled plugins
+- An honest, clearly-labelled estimate for MCP tool schemas
+
+It reports the resting baseline plus its zone, a measured-vs-estimated split, a
+breakdown table (largest first), and a separate on-demand pool for awareness. It is
+**read-only and stateless** -- it writes no files and keeps no cross-session state.
+
+```bash
+# Scan the current project (defaults to cwd)
+python3 skills/context-analyser/scripts/scan_project.py
+
+# Scan a specific project, skip global memory and the MCP estimate
+python3 skills/context-analyser/scripts/scan_project.py /path/to/project --no-global --no-mcp
+
+# Raw manifest as JSON
+python3 skills/context-analyser/scripts/scan_project.py --json
+```
+
+MCP tool schemas are not on disk for hosted servers, so the script enumerates the
+configured servers but reports their token cost as estimated. Run `/project-scan`
+interactively for a live in-session estimate of the actual MCP tools available.
 
 ### Optional: Auto-Audit on Session Start
 

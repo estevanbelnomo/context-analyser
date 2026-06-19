@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.0] - 2026-06-19
+
+### Added
+
+- `/project-scan` command: a read-only, stateless full-project context scan that reports the entire resting-context baseline -- not just CLAUDE.md, but every always-loaded source -- and its context-rot zone, alongside a separate on-demand pool.
+- `scripts/scan_project.py`: a read-only full-project resting-context-budget analyser (stdlib only). It resolves CLAUDE.md `@imports` recursively (cycle-safe, depth-capped), inventories user-global memory (`~/.claude/CLAUDE.md` and its imports), CLAUDE.local.md, nested subdirectory CLAUDE.md files, and skill/agent/command and enabled-plugin descriptions, and produces an honest MCP hybrid estimate (enumerates configured MCP servers from disk and labels tool-schema tokens as estimated, since they are not measurable from disk). Reuses `count_tokens` for the tokenizer and zone thresholds (single source of truth).
+- Tests (`tests/test_scan_project.py`) with a sample-project fixture tree, plus a `references/project-scan.md` guidance document.
+
 ## [1.1.1] - 2026-06-19
 
 ### Fixed
@@ -76,6 +84,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Multi-file directory scanning (audit entire .claude/ tree)
 - Custom zone thresholds (per-model tuning)
 - Per-edit granular accept/reject in compression phase
+- `/project-scan`: when a project root sits entirely outside `_validate_path`'s allowed roots (cwd / home / /tmp / /mnt), files are read as 0 tokens *silently* (the validator rejects them) instead of emitting a note. The baseline then under-reports without explanation. Surface a clear "source outside allowed roots — not measured" note per affected source, or warn once up front. (Found 2026-06-19 while verifying v1.2.0; deferred — real project roots are covered by the existing allowed roots.)
 
 ### Known Test Gaps (see tests/KNOWN_TEST_GAPS.md)
 

@@ -81,6 +81,26 @@ _B64_PATTERN: re.Pattern[str] = re.compile(r'["\'][A-Za-z0-9+/=]{64,}["\']')
 _HEX_PATTERN: re.Pattern[str] = re.compile(r'["\'](?:\\x[0-9a-fA-F]{2}){8,}["\']')
 
 
+def _is_first_party_sibling(module_root: str, file_dir: Path) -> bool:
+    """
+    First-party allowance (Rule 1, narrow): permit importing a sibling module
+    that physically exists as `<module_root>.py` in the SAME scripts/ directory
+    as the file being scanned (e.g. scan_project.py importing `count_tokens`).
+
+    This does NOT weaken security:
+      - The sibling is itself scanned by this self-test (same directory), so it
+        is held to every banned-import / banned-call / length rule.
+      - Only a real local .py file qualifies; no stdlib module outside the
+        permitted set and no banned module can ever match (a banned root is
+        checked first, and there is no e.g. `subprocess.py` in scripts/).
+      - It is a plain file-existence check: no import, no execution, no
+        dynamic loading is performed here.
+    """
+    if not module_root or not module_root.isidentifier():
+        return False
+    return (file_dir / f"{module_root}.py").is_file()
+
+
 def _module_rule(module: str) -> str:
     """Map a banned module to its governing rule."""
     network = {
@@ -109,6 +129,7 @@ def _scan_file(filepath: Path) -> list[str]:
     Returns list of violation descriptions. Empty list = clean.
     """
     violations: list[str] = []
+    file_dir = filepath.parent
 
     try:
         source = filepath.read_text(encoding="utf-8")
@@ -132,7 +153,10 @@ def _scan_file(filepath: Path) -> list[str]:
                         f"Line {node.lineno}: Banned import '{alias.name}' "
                         f"(Rule: {_module_rule(root)})"
                     )
-                elif root not in _PERMITTED_MODULES:
+                elif (
+                    root not in _PERMITTED_MODULES
+                    and not _is_first_party_sibling(root, file_dir)
+                ):
                     violations.append(
                         f"Line {node.lineno}: Unpermitted import '{alias.name}'. "
                         f"Only stdlib modules in the permitted list are allowed (Rule 1)."
@@ -145,7 +169,10 @@ def _scan_file(filepath: Path) -> list[str]:
                     f"Line {node.lineno}: Banned 'from {node.module} import ...' "
                     f"(Rule: {_module_rule(root)})"
                 )
-            elif root not in _PERMITTED_MODULES:
+            elif (
+                root not in _PERMITTED_MODULES
+                and not _is_first_party_sibling(root, file_dir)
+            ):
                 violations.append(
                     f"Line {node.lineno}: Unpermitted 'from {node.module} import ...'. "
                     f"Only stdlib modules in the permitted list are allowed (Rule 1)."

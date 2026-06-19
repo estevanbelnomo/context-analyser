@@ -1,7 +1,7 @@
 {
   "name": "context-analyser",
   "description": "Audit and optimise CLAUDE.md files for token efficiency and context rot mitigation",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": {
     "name": "Estevan"
   },
