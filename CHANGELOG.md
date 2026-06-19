@@ -12,6 +12,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - SKILL.md compressed back under 500 tokens (GREEN) by the bundled counter, restoring self-compliance with the project's own token budget (was ~641, YELLOW).
 - Test gate made honest: documentation now points at the stdlib standalone runners (python3 tests/test_count_tokens.py / test_boundary_check.py) instead of pytest, and the test "_assert" helper now raises on failure so a failing assertion can no longer be reported as a pass.
 - Plugin version metadata synced to 1.1.1 across plugin.json, package.json, and marketplace.json (were stuck at 1.0.0).
+- Corrected README install instructions: the plugin install command now uses the registered marketplace name (`context-analyser@context-analyser`, not `@estevanbelnomo/context-analyser`), and the manual-install section now symlinks/copies the `skills/context-analyser` subdirectory instead of cloning the whole repo into `.claude/skills/` (which nested `SKILL.md` two levels too deep and was undiscoverable).
 
 ### Changed
 

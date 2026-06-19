@@ -37,28 +37,31 @@ Each phase only runs if the previous one didn't bring the file into the GREEN zo
 ### As a Claude Code plugin (recommended)
 
 ```bash
-# Add the marketplace
+# Add the marketplace (registers under the name in marketplace.json: "context-analyser")
 /plugin marketplace add estevanbelnomo/context-analyser
 
-# Install the plugin
-/plugin install context-analyser@estevanbelnomo/context-analyser
+# Install the plugin — syntax is <plugin>@<marketplace-name>, both are "context-analyser"
+/plugin install context-analyser@context-analyser
 ```
 
-### Manual (clone into skills directory)
+### Manual (without the plugin system)
+
+The skill itself lives in the repo's `skills/context-analyser/` subdirectory, and
+Claude Code expects it at `.claude/skills/<name>/SKILL.md`. So clone the repo to a
+stable location, then symlink (or copy) **just the skill subdirectory** into place:
 
 ```bash
-# From your project root
+# Clone somewhere stable — NOT directly into .claude/skills
+git clone https://github.com/estevanbelnomo/context-analyser.git ~/src/context-analyser
+
+# From your project root: link the skill subdir into place
 mkdir -p .claude/skills
-git clone https://github.com/estevanbelnomo/context-analyser.git .claude/skills/context-analyser
+ln -s ~/src/context-analyser/skills/context-analyser .claude/skills/context-analyser
 ```
 
-Or as a git submodule:
-
-```bash
-git submodule add https://github.com/estevanbelnomo/context-analyser.git .claude/skills/context-analyser
-```
-
-Claude Code detects the skill automatically from `.claude/skills/`.
+Use `cp -r ~/src/context-analyser/skills/context-analyser .claude/skills/` instead of
+`ln -s` if you want a static copy with no link back to the clone. Claude Code detects
+the skill automatically from `.claude/skills/`.
 
 ## Usage
 
